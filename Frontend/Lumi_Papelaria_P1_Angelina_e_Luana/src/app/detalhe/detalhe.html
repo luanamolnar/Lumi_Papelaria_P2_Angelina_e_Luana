@@ -1,0 +1,26 @@
+<div class="container my-4" *ngIf="produto() as p; else naoEncontrado">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{p.codigo}}.jpeg" class="img-fluid ">
+        </div>
+        <div class="col-md-8">
+            <h2 class="fw-bold">{{p.nome}}</h2>
+            <p>{{p.descritivo}}</p>
+            <h4>R$ {{p.valor | number:'1.2-2'}}</h4>
+            <p *ngIf="p.quantidade > 0">{{p.quantidade}} unidades em estoque</p>
+            <p class="text-danger" *ngIf="p.quantidade <= 0">Produto indisponível no momento</p>
+
+            <div class="alert alert-warning" *ngIf="mensagem">{{mensagem}}</div>
+
+            <button class="btn btn-dark" *ngIf="p.quantidade > 0" (click)="comprar(p)">Comprar</button>
+            <a routerLink="/vitrine" class="btn btn-primary ms-2">Voltar para a vitrine</a>
+        </div>
+    </div>
+</div>
+
+<ng-template #naoEncontrado>
+    <div class="container my-4">
+        <div class="alert alert-danger">Produto não encontrado.</div>
+        <a routerLink="/vitrine" class="btn btn-outline-primary">Voltar para a vitrine</a>
+    </div>
+</ng-template>

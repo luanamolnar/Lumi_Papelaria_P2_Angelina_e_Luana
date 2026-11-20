@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="box">
+
+        <h3>Recuperação de Senha</h3>
+
+        <div class="alert alert-danger" *ngIf="erro()">{{erro()}}</div>
+
+        <!-- Etapa 1: informar o e-mail -->
+        <form *ngIf="etapa() === 1" #f1="ngForm" (ngSubmit)="resetar()">
+            <p>Informe seu e-mail para resetar sua senha.</p>
+            <div class="row">
+                <label for="txtEmail">E-mail: </label>
+                <input class="p-2" type="email" id="txtEmail" name="email" placeholder="oseu@email.com" [(ngModel)]="email" required>
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100 mt-4 mb-4" [disabled]="f1.invalid">Redefinir senha</button>
+        </form>
+
+        <!-- Etapa 2: criar a nova senha -->
+        <div *ngIf="etapa() === 2 && !mensagem()">
+            <div class="alert alert-info">
+                Sua senha foi redefinida para a senha temporária <strong>Senha1234</strong>.
+                O envio por e-mail ainda não está disponível, então use essa senha para criar uma nova abaixo.
+            </div>
+
+            <form #f2="ngForm" (ngSubmit)="trocar()">
+                <div class="row">
+                    <label for="txtTemp">Senha temporária: </label>
+                    <input class="p-2" type="password" id="txtTemp" name="temp" [(ngModel)]="senhaTemporaria" required>
+                </div>
+
+                <div class="row mt-3">
+                    <label for="txtNova">Nova senha: </label>
+                    <input class="p-2" type="password" id="txtNova" name="nova" [(ngModel)]="novaSenha"
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required>
+                    <small class="text-muted">Mínimo de 8 caracteres, com maiúscula, minúscula, número e caractere especial.</small>
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100 mt-4 mb-4" [disabled]="f2.invalid">Alterar senha</button>
+            </form>
+        </div>
+
+        <div class="alert alert-success" *ngIf="mensagem()">{{mensagem()}}</div>
+
+        <div>
+            <a routerLink="/login" class="btn btn-primary w-100" id="btn login">Voltar para o Login</a>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="container my-4">
+    <h3>Meus Pedidos</h3>
+
+    <div class="alert alert-info" *ngIf="carregado() && linhas().length === 0">
+        Você ainda não fez nenhum pedido. <a routerLink="/vitrine">Ir para a vitrine</a>
+    </div>
+
+    <table class="table" *ngIf="linhas().length > 0">
+        <thead>
+            <tr><th>Pedido</th><th>Data</th><th>Entrega</th><th>Itens</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let l of linhas()">
+                <td>nº {{l.local.numero}}</td>
+                <td>{{l.salvo?.dataPedido | date:'dd/MM/yyyy'}}</td>
+                <td>{{l.salvo?.entrega}}</td>
+                <td>
+                    <div *ngFor="let i of l.local.itens">{{i.quantidade}}x {{i.nome}}</div>
+                </td>
+                <td>R$ {{(l.salvo?.valorTotal ?? l.local.total) | number:'1.2-2'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

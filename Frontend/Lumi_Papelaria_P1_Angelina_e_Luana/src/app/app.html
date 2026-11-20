@@ -1,0 +1,25 @@
+<header>
+    <img src="logotipo.png" class="logotipo">
+  <div class="search-box"> 
+    <input #busca type="text" class="search-text" placeholder="Pesquisar..." (keyup.enter)="buscar(busca.value)"> 
+        <button type="submit" class="submit" (click)="buscar(busca.value)">🔍</button>
+</div>
+    <a routerLink="/login">
+    <img src="login.png" id="login" alt="Descrição da imagem">
+    </a>
+
+</header>
+
+<div class="text-center">
+    <nav class="btn-group">
+        <a routerLink="/cesta" id="menus" class="btn btn-secondary">Sua Cesta</a> 
+        <a routerLink="/vitrine" id="menus" class="btn btn-secondary">Nossos Produtos</a> 
+        <a routerLink="/lista-pedidos" id="menus" class="btn btn-secondary">Meus Pedidos</a> 
+    </nav>
+</div>
+
+<router-outlet />
+<footer class="text-front text-light">
+    Nosso telefone: (11) 9327-7321<br>E-mail: lumipapelaria@gmail.com <br>
+    R. Borboletas Psicodélicas - Vila Guarani, 29 - São Paulo - SP 
+</footer>

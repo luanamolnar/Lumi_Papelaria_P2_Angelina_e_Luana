@@ -1,0 +1,84 @@
+<div class="container my-4">
+    <h3>Finalizar Pedido</h3>
+
+    <!-- Precisa estar logado -->
+    <div *ngIf="!logado">
+        <div class="alert alert-warning">Para finalizar o pedido você precisa fazer login.</div>
+        <a routerLink="/login" class="btn btn-dark">Fazer login</a>
+        <a routerLink="/cesta" class="btn btn-outline-primary ms-2">Voltar para a cesta</a>
+    </div>
+
+    <div *ngIf="logado">
+
+        <!-- Pedido já confirmado -->
+        <div *ngIf="confirmado() as c">
+            <div class="alert alert-success">Pedido nº {{c.numero}} realizado com sucesso!</div>
+
+            <p>
+                Data: {{c.data | date:'dd/MM/yyyy HH:mm'}}<br>
+                Cliente: {{c.cliente.nome}} - {{c.cliente.telefone}}<br>
+                Entrega: {{c.cliente.endereco}}
+            </p>
+
+            <table class="table">
+                <thead>
+                    <tr><th>Produto</th><th>Valor</th><th>Quantidade</th><th>Subtotal</th></tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of c.itens">
+                        <td>{{item.nome}}</td>
+                        <td>R$ {{item.valor | number:'1.2-2'}}</td>
+                        <td>{{item.quantidade}}</td>
+                        <td>R$ {{item.subtotal | number:'1.2-2'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4 class="text-end">Total: R$ {{c.total | number:'1.2-2'}}</h4>
+
+            <a routerLink="/vitrine" class="btn btn-outline-primary">Voltar para a vitrine</a>
+        </div>
+
+        <!-- Cesta vazia -->
+        <div *ngIf="!confirmado() && cesta.vazia">
+            <div class="alert alert-info">Sua cesta está vazia, não há nada para finalizar.</div>
+            <a routerLink="/vitrine" class="btn btn-outline-primary">Ir para a vitrine</a>
+        </div>
+
+        <!-- Resumo da cesta + dados de entrega -->
+        <div *ngIf="!confirmado() && !cesta.vazia">
+            <table class="table">
+                <thead>
+                    <tr><th>Produto</th><th>Valor</th><th>Quantidade</th><th>Subtotal</th></tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of cesta.itens">
+                        <td>{{item.produto.nome}}</td>
+                        <td>R$ {{item.produto.valor | number:'1.2-2'}}</td>
+                        <td>{{item.quantidade}}</td>
+                        <td>R$ {{item.subtotal | number:'1.2-2'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4 class="text-end">Total: R$ {{cesta.total | number:'1.2-2'}}</h4>
+
+            <div class="alert alert-danger" *ngIf="erro()">{{erro()}}</div>
+
+            <form class="was-validated" #f="ngForm" (ngSubmit)="finalizar()">
+                <label for="txtNome" class="form-label">Nome:</label>
+                <input type="text" class="form-control" id="txtNome" name="nome" [(ngModel)]="cliente.nome" required>
+                <div class="invalid-feedback">Obrigatório!</div>
+
+                <label for="txtTelefone" class="form-label">Telefone:</label>
+                <input type="text" class="form-control" id="txtTelefone" name="telefone" [(ngModel)]="cliente.telefone" required>
+                <div class="invalid-feedback">Obrigatório!</div>
+
+                <label for="txtEndereco" class="form-label">Endereço de entrega:</label>
+                <textarea class="form-control" id="txtEndereco" name="endereco" rows="3" [(ngModel)]="cliente.endereco" required></textarea>
+                <div class="invalid-feedback">Informe o endereço completo!</div><br>
+
+                <button type="submit" class="btn btn-success w-100" [disabled]="f.invalid || enviando()">Confirmar pedido</button>
+                <a routerLink="/cesta" class="btn btn-outline-primary w-100 mt-2">Voltar para a cesta</a>
+            </form>
+        </div>
+    </div>
+</div>

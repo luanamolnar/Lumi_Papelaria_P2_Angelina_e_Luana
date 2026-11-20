@@ -1,0 +1,46 @@
+<div class="container my-5">
+    <h2 class="mb-4 text-dark fw-bold border-bottom pb-2">Sua Cesta de Compras</h2>
+
+    <div class="alert alert-info" *ngIf="cesta.vazia">
+        Sua cesta está vazia. <a routerLink="/vitrine">Escolha seus produtos na vitrine.</a>
+    </div>
+
+    <div *ngIf="!cesta.vazia">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of cesta.itens">
+                    <td><img src="{{item.produto.codigo}}.jpeg" width="60"></td>
+                    <td>{{item.produto.nome}}</td>
+                    <td>R$ {{item.produto.valor | number:'1.2-2'}}</td>
+                    <td>
+                        <button class="btn btn-outline-secondary btn-sm" (click)="cesta.diminuir(item)"
+                            [disabled]="item.quantidade <= 1">-</button>
+                        <span class="mx-2">{{item.quantidade}}</span>
+                        <button class="btn btn-outline-secondary btn-sm" (click)="cesta.aumentar(item)"
+                            [disabled]="item.quantidade >= item.produto.quantidade">+</button>
+                    </td>
+                    <td>R$ {{item.subtotal | number:'1.2-2'}}</td>
+                    <td><button class="btn btn-outline-danger btn-sm" (click)="cesta.remover(item)">Remover</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 class="text-end">Total: R$ {{cesta.total | number:'1.2-2'}}</h4>
+
+        <div class="text-end mt-3">
+            <button class="btn btn-danger" (click)="cesta.esvaziar()">Esvaziar cesta</button>
+            <a routerLink="/vitrine" class="btn btn-primary ms-2">Continuar comprando</a>
+            <a routerLink="/pedido" class="btn btn-dark ms-2">Finalizar pedido</a>
+        </div>
+    </div>
+</div>
